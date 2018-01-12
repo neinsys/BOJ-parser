@@ -60,8 +60,10 @@ def workbook_ranklist_test():
     pprint(boj.workbook_ranklist(1))
 
 
-def user_test():
+def user_test(handle):
     boj = Boj()
-    pprint(boj.user('ytw0728'))
+    pprint(boj.user(handle))
 
-
+def vs_test(handle1, handle2):
+    boj = Boj()
+    pprint(boj.vs(handle1, handle2))

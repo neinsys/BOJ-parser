@@ -14,6 +14,7 @@ class Boj:
     _SUBMISSION = "source/"
     _WORKBOOK = "workbook/"
     _USER = "user/"
+    _VS = "vs/"
 
     _LANGUAGE_MAP = {
 
@@ -121,6 +122,14 @@ class Boj:
         'handle': None,
         'number_of_clear_workbook': None,
         'last_clear': None
+    }
+
+    _VS_INFO = {
+        'handle1' : None,
+        'handle2' : None,
+        'both_solved_problem' : [],
+        'only_1_solved_problem' : [],
+        'only_2_solved_problem' : []
     }
 
     _session = None
@@ -435,7 +444,33 @@ class Boj:
         return user
 
     def vs(self, handle1, handle2):
-        pass
+        url = self._BOJ_URL + self._VS + handle1 + '/' + handle2
+
+        vs_html = self._session.get(url).text
+        soup = BeautifulSoup(vs_html, "html.parser")
+
+        vs = deepcopy(self._VS_INFO)
+
+        vs['handle1'] = handle1
+        vs['handle2'] = handle2
+
+        problem_list = soup.find_all('div', {'class': 'panel-body'})
+
+        both_solved_problem_list = problem_list[0].find_all('span')
+        only_1_solved_problem_list = problem_list[1].find_all('span')
+        only_2_solved_problem_list = problem_list[2].find_all('span')
+
+        for idx, title in zip(both_solved_problem_list[::2], both_solved_problem_list[1::2]):
+            vs['both_solved_problem'].append((idx.text, title.text))
+
+        for idx, title in zip(only_1_solved_problem_list[::2], only_1_solved_problem_list[1::2]):
+            vs['only_1_solved_problem'].append((idx.text, title.text))
+
+        for idx, title in zip(only_2_solved_problem_list[::2], only_2_solved_problem_list[1::2]):
+            vs['only_2_solved_problem'].append((idx.text, title.text))
+
+        return vs
+
 
     def ranklist(self):
         pass
@@ -452,5 +487,3 @@ class Boj:
     def lectures(self):
         pass
 
-    def notifications(self,start_page=1,page=1):
-        pass
