@@ -14,7 +14,7 @@ def submit_test():
     """
 
     boj = Boj()
-    boj.login("sys7961",input())
+    boj.login(input("ID :"),getpass("password :"))
     boj.submit(1000,source)
     boj.logout()
 
