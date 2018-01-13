@@ -67,3 +67,7 @@ def user_test(handle):
 def vs_test(handle1, handle2):
     boj = Boj()
     pprint(boj.vs(handle1, handle2))
+
+def board_list_test():
+    boj = Boj()
+    pprint(boj.boardlist())

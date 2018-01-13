@@ -15,6 +15,8 @@ class Boj:
     _WORKBOOK = "workbook/"
     _USER = "user/"
     _VS = "vs/"
+    _BOARD = "board/view/"
+    _BOARD_LIST = "board/list/"
 
     _LANGUAGE_MAP = {
 
@@ -130,6 +132,32 @@ class Boj:
         'both_solved_problem' : [],
         'only_1_solved_problem' : [],
         'only_2_solved_problem' : []
+    }
+
+    _BOARD_INFO = {
+        'posts': []
+    }
+
+    _POST_INFO = {
+        'title': None,
+        'author': None,
+        'category':None,
+        'date': None,
+        'post': None,
+        'comments': [],
+    }
+
+    _POST_SMALL_INFO = {
+        'title': None,
+        'author': None,
+        'category':None,
+        'origin_time_of_writing': None,
+        'origin_time_of_editing': None,
+        'time_of_writing': None,
+        'time_of_editing': None,
+        'number_of_comments': [],
+        'likes': None,
+        'notice': False
     }
 
     _session = None
@@ -475,8 +503,38 @@ class Boj:
     def ranklist(self):
         pass
 
+    def boardlist(self, category="all", search=None):
+        # 전체 : all, 공지 : notice, 자유 : free, 질문 : question, 인사 : hello, 의견 : opinion, 오타/오역/요청 : typo, 문제 추천 : recommend
+        url = self._BOJ_URL + self._BOARD_LIST + category
+
+        boardlist_html = self._session.get(url).text
+        soup = BeautifulSoup(boardlist_html, "html.parser")
+
+        board = deepcopy(self._BOARD_INFO)
+
+        order = ['title', 'category', 'author', 'number_of_comments', 'likes',
+                 'time_of_writing', 'time_of_editing']
+
+        table = soup.find('table')
+
+        for tr in table.tbody.find_all('tr'):
+            tds = tr.find_all('td')
+            post = deepcopy(self._POST_SMALL_INFO)
+            for idx, td  in enumerate(tds):
+                if idx==5 or idx==6:
+                    post['origin_'+order[idx]] = td.a.get('title')
+                post[order[idx]] = td.text
+
+            trClass=tr.get('class')
+            if trClass is not None and 'success' in trClass:
+                post['notice'] = True
+
+            board['posts'].append(post)
+
+        return board
+
     def board(self):
-        pass
+        url = self._BOJ_URL
 
     def group(self):
         pass
