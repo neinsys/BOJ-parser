@@ -378,7 +378,7 @@ class Boj:
         return submission
 
     def status(self, page=1, **option):
-        #top=None, problem_id=None, user_id=None, language=None, result=None, group_id=None,workbook_id=None
+        #top=None, problem_id=None, user_id=None, language=None, result=None, group_id=None, workbook_id=None, school_id=None
         url = self._BOJ_URL + self._STATUS + '?'
         for key,value in option.items():
             if key == 'language':

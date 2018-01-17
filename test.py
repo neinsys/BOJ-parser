@@ -34,8 +34,9 @@ def problemset_test():
 def status_test():
     boj = Boj()
     pprint(boj.status())
-    pprint(boj.status(group_id=543))
-    pprint(boj.status(group_id=543,problem_id=1000,user_id="sys7961",language='c++11',page=2))
+    #pprint(boj.status(group_id=543))
+    pprint(boj.status(school_id=323, page=2))
+    #pprint(boj.status(group_id=543,problem_id=1000,user_id="sys7961",language='c++11',page=2))
 
 
 def submission_test():
